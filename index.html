@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Translation App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        label {
+            min-width: 150px; /* Set minimum width to 150 pixels */
+            text-align: left; /* Align label text to the left */
+        }
+    </style>
+
+ 
+</head>
+<body>
+    <h1>Translation App</h1>
+    <div class="container">
+        <form id="translation-form">
+            <div class="form-group" id="api-key-group" style="display: block;">
+                <label for="api-key-input">API Key:</label>
+                <input type="password" class="form-control" id="api-key-input" name="apiKey" >
+            </div>
+            <div class="form-group" id="openai-api-key-group" style="display: none;">
+                <label for="openai-api-key-input">OpenAI API Key:</label>
+                <input type="password" class="form-control" id="openai-api-key-input" name="openaiApiKey" >
+            </div>
+            <div class="form-group">
+                <label for="text-input">Text to Translate:</label>
+                <textarea class="form-control" id="text-input" name="text" rows="5" required></textarea>
+            </div>
+            <div class="form-group" id="textarea-group" style="display: none;">
+                <label for="user-text-input">User Input Text:</label>
+                <textarea class="form-control" id="user-text-input" name="userText" rows="5"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="target-lang-input">Target Language:</label>
+                <select class="form-control" id="target-lang-input" name="targetLang" onchange="showHideTextarea()">
+                    <option value="FREN">FR -> EN</option>
+                    <option value="ENFR">EN -> FR</option>
+                    <option value="FRENFR">FR -> EN -> FR</option>
+                    <option value="GPT">GPT</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Translate</button>
+        </form>
+        <br>
+        <div class="form-group">
+            <label for="translated-text-field">Translated Text:</label>
+            <textarea class="form-control resize-none" id="translated-text-field" rows="5" cols="50" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' ></textarea>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        const translationForm = document.getElementById('translation-form');
+        const translatedTextField = document.getElementById('translated-text-field');
+        translationForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const apiKey = document.getElementById('api-key-input').value;
+            const openaiApiKey = document.getElementById('openai-api-key-input').value;
+            const text = document.getElementById('text-input').value;
+            const userText = document.getElementById('user-text-input').value;
+            const targetLangInput = document.getElementById('target-lang-input');
+            const targetLang = targetLangInput.options[targetLangInput.selectedIndex].value;
+            const url = `/translate?apiKey=${apiKey}&openaiApiKey=${openaiApiKey}&text=${text}&userText=${userText}&targetLang=${targetLang}`;
+            fetch(url)
+                .then(response => response.text())
+                .then(translatedText => translatedTextField.value = translatedText)
+                .catch(error => console.error(error));
+        });
+    </script>
+
+
+  <script>
+  function showHideTextarea() {
+    var targetLangInput = document.getElementById('target-lang-input');
+    var selectedOptionValue = targetLangInput.options[targetLangInput.selectedIndex].value;
+    var textareaGroup = document.getElementById('textarea-group');
+    var openaiApiKeyGroup = document.getElementById('openai-api-key-group');
+    var apiKeyGroup = document.getElementById('api-key-group');
+    if (selectedOptionValue === "GPT") {
+      // Show the textarea
+      textareaGroup.style.display = "block";
+      openaiApiKeyGroup.style.display = "block";
+      apiKeyGroup.style.display = "none";
+    } else {
+      // Hide the textarea
+      textareaGroup.style.display = "none";
+      openaiApiKeyGroup.style.display = "none";
+      apiKeyGroup.style.display = "block";
+    }
+  }
+</script>
+
+      <script>
+        // Set the value of the api-key-input field from the "apiKey" URL parameter
+        const urlParams = new URLSearchParams(window.location.search)
+        const apiKey = urlParams.get('apiKey')
+        if (apiKey) {
+            $('#api-key-input').val(apiKey)
+        }
+    </script>
+
+
+</body>
+</html>
