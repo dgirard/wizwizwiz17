@@ -93,10 +93,10 @@ func translateHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Dans la boucle Here")
 	if targetLangInput == "GPT" {
 		log.Println("Dans la boucle GPT")
-    userText :=  r.URL.Query().Get("userText")
+    systemText :=  r.URL.Query().Get("systemText")
 
     
-		respBody, err := openaiChatCompletionsRequest(openaiApiKey, userText, text)
+		respBody, err := openaiChatCompletionsRequest(openaiApiKey, systemText, text)
 		if err != nil {
 			fmt.Println("Error:", err)
 			return
@@ -179,14 +179,14 @@ func getTranslationLanguages(targetLangInput string) (string, string, error) {
 	return sourceLang, targetLang, nil
 }
 
-func openaiChatCompletionsRequest(openaiKey string, systemMsg string, userMsg string) ([]byte, error) {
+func openaiChatCompletionsRequest(openaiKey string, text string, systemText string) ([]byte, error) {
 	// Set the necessary headers
 	contentType := "application/json"
 	authToken := "Bearer " + openaiKey // Replace with your actual API token
 	// Build the HTTP request body
 	msgs := []Message{
-		Message{Role: "system", Content: systemMsg},
-		Message{Role: "user", Content: userMsg},
+		Message{Role: "system", Content: systemText},
+		Message{Role: "user", Content: text},
 	}
 	completionRequest := CompletionRequest{
 		Messages:    msgs,

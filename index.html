@@ -29,8 +29,8 @@
                 <textarea class="form-control" id="text-input" name="text" rows="5" required></textarea>
             </div>
             <div class="form-group" id="textarea-group" style="display: none;">
-                <label for="user-text-input">User Input Text:</label>
-                <textarea class="form-control" id="user-text-input" name="userText" rows="5"></textarea>
+                <label for="system-text-input">System Input Text:</label>
+                <textarea class="form-control" id="system-text-input" name="systemText" rows="5"></textarea>
             </div>
             <div class="form-group">
                 <label for="target-lang-input">Target Language:</label>
@@ -59,10 +59,10 @@
             const apiKey = document.getElementById('api-key-input').value;
             const openaiApiKey = document.getElementById('openai-api-key-input').value;
             const text = document.getElementById('text-input').value;
-            const userText = document.getElementById('user-text-input').value;
+            const systemText = document.getElementById('system-text-input').value;
             const targetLangInput = document.getElementById('target-lang-input');
             const targetLang = targetLangInput.options[targetLangInput.selectedIndex].value;
-            const url = `/translate?apiKey=${apiKey}&openaiApiKey=${openaiApiKey}&text=${text}&userText=${userText}&targetLang=${targetLang}`;
+            const url = `/translate?apiKey=${apiKey}&openaiApiKey=${openaiApiKey}&text=${text}&systemText=${systemText}&targetLang=${targetLang}`;
             fetch(url)
                 .then(response => response.text())
                 .then(translatedText => translatedTextField.value = translatedText)
