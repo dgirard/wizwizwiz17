@@ -96,9 +96,14 @@
         // Set the value of the api-key-input field from the "apiKey" URL parameter
         const urlParams = new URLSearchParams(window.location.search)
         const apiKey = urlParams.get('apiKey')
+        const openaiApiKey = urlParams.get('openaiApiKey')
         if (apiKey) {
             $('#api-key-input').val(apiKey)
         }
+        if (openaiApiKey) {
+            $('#openai-api-key-input').val(openaiApiKey)
+        }
+      </script>
     </script>
 
 
