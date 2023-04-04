@@ -37,6 +37,7 @@ type Message struct {
 
 // build an http server
 func main() {
+    log.Println("Ici1")
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/translate", translateHandler)
 	fs := http.FileServer(http.Dir("."))
@@ -79,15 +80,28 @@ func makeDeepLRequest(apiKey string, text string, targetLang string) (string, er
 }
 
 func translateHandler(w http.ResponseWriter, r *http.Request) {
-
+    // Parse form data from the request body
+    err := r.ParseForm()
+    if err != nil {
+        http.Error(w, "Error parsing form data", http.StatusInternalServerError)
+        return
+    }
+  
+  log.Println("Ici")
 	// Get the API key from the query parameters
-	apiKey := r.URL.Query().Get("apiKey")
-	openaiApiKey := r.URL.Query().Get("openaiApiKey")
+	apiKey := r.FormValue("apiKey")
+
+	openaiApiKey := r.FormValue("openaiApiKey")
 
 	// Get the text and target language from the query parameters
-	text := r.URL.Query().Get("text")
+	text := r.FormValue("text")
+   log.Printf("Received 'text' parameter: %s\n", text)
+  log.Println("text", text)
 
-	targetLangInput := r.URL.Query().Get("targetLang")
+	targetLangInput := r.FormValue("targetLang")
+    log.Println(targetLangInput)
+
+  
 	log.Println("The target language is  gg:", targetLangInput)
 
 	log.Println("Dans la boucle Here")
@@ -198,6 +212,10 @@ func openaiChatCompletionsRequest(openaiKey string, text string, systemText stri
 	if err != nil {
 		return nil, err
 	}
+  // log text
+	log.Println(string(reqBody))
+
+  
 	// Build the HTTP request
 	req, err := http.NewRequest("POST", "https://api.openai.com/v1/chat/completions", bytes.NewBuffer(reqBody))
 	if err != nil {

@@ -59,15 +59,29 @@
             const apiKey = document.getElementById('api-key-input').value;
             const openaiApiKey = document.getElementById('openai-api-key-input').value;
             const text = document.getElementById('text-input').value;
+
+          //new Option(document.getElementById('text-input').value).innerHTML
+
+          
             const systemText = document.getElementById('system-text-input').value;
             const targetLangInput = document.getElementById('target-lang-input');
             const targetLang = targetLangInput.options[targetLangInput.selectedIndex].value;
-            const url = `/translate?apiKey=${apiKey}&openaiApiKey=${openaiApiKey}&text=${text}&systemText=${systemText}&targetLang=${targetLang}`;
-            fetch(url)
+            const url = `/translate`;
+            const queryString = `apiKey=${encodeURIComponent(apiKey)}&openaiApiKey=${encodeURIComponent(openaiApiKey)}&text=${encodeURIComponent(text)}&systemText=${encodeURIComponent(systemText)}&targetLang=${encodeURIComponent(targetLang)}`;
+        // log in the console the querystring
+          
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: queryString
+            })
                 .then(response => response.text())
                 .then(translatedText => translatedTextField.value = translatedText)
                 .catch(error => console.error(error));
         });
+
     </script>
 
 
