@@ -107,10 +107,9 @@ func translateHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Dans la boucle Here")
 	if targetLangInput == "GPT" {
 		log.Println("Dans la boucle GPT")
-    systemText :=  r.URL.Query().Get("systemText")
-
+    systemText :=   r.FormValue("systemText") 
     
-		respBody, err := openaiChatCompletionsRequest(openaiApiKey, systemText, text)
+		respBody, err := openaiChatCompletionsRequest(openaiApiKey, text, systemText)
 		if err != nil {
 			fmt.Println("Error:", err)
 			return
